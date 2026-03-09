@@ -11,9 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Great+Vibes&family=Marck+Script&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <link rel="preload" as="image" href="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg">
-    <!-- صورة الرسالة الجديدة (تم تصغير العرض إلى 400 لسرعة التحميل) -->
-    <link rel="preload" as="image" href="https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=400">
+    <!-- تحميل الخلفية مصغرة ومحسنة كـ WebP لسرعة الصاروخ -->
+    <link rel="preload" as="image" href="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=80">
+    <!-- صورة الرسالة مصغرة -->
+    <link rel="preload" as="image" href="https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=80">
 
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,12 +26,16 @@
             width: 100%; 
             height: 100vh; 
             height: 100lvh; 
-            background-image: url('https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg');
+            /* استخدام الصورة المحسنة */
+            background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=80');
             background-size: cover;
             background-position: center top; 
             z-index: -10;
             background-repeat: no-repeat;
             pointer-events: none;
+            /* تسريع الرسوميات لمنع اللاج */
+            transform: translateZ(0); 
+            will-change: transform;
         }
 
         #fixed-background::after {
@@ -93,15 +98,12 @@
             color: white; padding: 12px; border-radius: 50px;
             text-align: center; font-size: 1.2rem; letter-spacing: 2px;
             width: 75%; max-width: 200px; outline: none; margin-bottom: 20px;
-            backdrop-filter: none; 
             transition: border-color 0.3s;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         .input-glass:focus { border-color: #fb7185; background: rgba(255,255,255,0.3); }
         
-        h1, h2, p, span, button, div {
-            text-shadow: 0 2px 8px rgba(0,0,0,0.8); 
-        }
+        h1, h2, p, span, button, div { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
 
         .hidden-content { display: none !important; }
 
@@ -123,11 +125,10 @@
 
         /* --- الكروت الزجاجية --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         /* --- شارة السنوات --- */
@@ -137,13 +138,7 @@
             padding: 6px 16px; border-radius: 50px;
             margin-bottom: 30px; font-size: 0.85rem;
             border: 1px solid rgba(225, 29, 72, 0.5);
-            animation: flashBorder 3s infinite ease-in-out;
             max-width: 95%;
-        }
-        @keyframes flashBorder {
-            0% { border-color: rgba(225, 29, 72, 0.2); box-shadow: 0 0 0 rgba(225, 29, 72, 0); }
-            50% { border-color: rgba(225, 29, 72, 1); box-shadow: 0 0 10px rgba(225, 29, 72, 0.5); }
-            100% { border-color: rgba(225, 29, 72, 0.2); box-shadow: 0 0 0 rgba(225, 29, 72, 0); }
         }
 
         /* --- السلايدر --- */
@@ -169,7 +164,7 @@
             position: fixed; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center;
         }
-        #lightbox img { max-width: 95%; max-height: 80%; border-radius: 10px; border: 2px solid #e11d48; }
+        #lightbox img { max-width: 95%; max-height: 80vh; object-fit: contain; border-radius: 10px; border: 2px solid #e11d48; }
         #lightbox-close {
             position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer;
             background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px; border-radius: 50%;
@@ -204,22 +199,21 @@
             border: 2px solid #fb7185; padding: 5px;
         }
 
-        /* --- نافذة الرسالة (تم تحويلها لصفحة كاملة سريعة) --- */
+        /* --- نافذة الرسالة (تم ضبط الحجم بدقة لشاشات الهواتف) --- */
         .modal {
             display: none; 
             position: fixed; 
-            z-index: 999999; /* لضمان تغطية كل شيء */
+            z-index: 999999; 
             left: 0; 
             top: 0; 
             width: 100%; 
             height: 100vh;
-            height: 100lvh; /* لدعم شاشات الموبايل الحديثة */
-            background-color: #050505; /* لون أسود صلب لمنع اللاج بدلاً من الشفافية والتغبيش */
-            align-items: flex-start; /* لتفعيل التمرير إذا كانت الرسالة طويلة */
+            height: 100lvh; 
+            background-color: #050505; 
+            align-items: center; /* توسيط عمودي */
             justify-content: center;
-            overflow-y: auto; /* السماح بالنزول والصعود */
-            padding: 20px 0;
-            animation: slideUp 0.3s ease-out; /* حركة فتح سلسة */
+            padding: 15px;
+            animation: slideUp 0.3s ease-out; 
         }
 
         @keyframes slideUp {
@@ -228,45 +222,49 @@
         }
 
         .paper {
-            /* خلفية مصغرة w=400 لسرعة التحميل */
-            background-image: url('https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=400');
+            background-image: url('https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp');
             background-size: cover;
             background-position: center;
             color: #ffe4e6;
             width: 95%; 
-            max-width: 500px;
-            min-height: 85vh; /* أخذ معظم مساحة الشاشة لتشبه الصفحة */
-            padding: 60px 20px 30px 20px;
+            max-width: 450px;
+            height: auto;
+            max-height: 85vh; /* يمنع الورقة من تخطي حجم الشاشة */
+            overflow-y: auto; /* يسمح بتمرير النص داخل الورقة فقط إذا كان طويلاً */
+            padding: 30px 15px 20px 15px; /* تقليل الحواف لزيادة مساحة النص */
             border-radius: 15px; 
             border: 2px solid #fb7185;
-            box-shadow: 0 0 20px rgba(159, 18, 57, 0.2); /* تقليل الظل لتخفيف الريندر */
             font-family: 'Marck Script', cursive; 
-            font-size: 1.1rem; /* تكبير الخط قليلاً ليكون مريحاً للقراءة */
-            line-height: 1.8;
+            font-size: 1.1rem; 
+            line-height: 1.7;
             position: relative; 
-            margin: auto;
+            box-shadow: 0 0 15px rgba(159, 18, 57, 0.4);
         }
+        
+        /* إخفاء شريط التمرير (السكرول) لجمالية الرسالة */
+        .paper::-webkit-scrollbar { display: none; }
+        .paper { -ms-overflow-style: none; scrollbar-width: none; }
         
         .paper::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.65); /* تغميق لتحسين قراءة النص */
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65); 
             z-index: 0;
             border-radius: 13px;
+            pointer-events: none; /* لعدم إعاقة التمرير */
         }
         
-        .paper p { position: relative; z-index: 1; margin-bottom: 15px; text-shadow: none; font-weight: bold; }
+        .paper p { position: relative; z-index: 1; margin-bottom: 12px; font-weight: bold; }
 
-        /* زر الإغلاق أصبح ثابتاً في الشاشة مثل زر الرجوع للخلف */
         .close-page-btn {
-            position: fixed; 
+            position: absolute; 
             top: 15px; 
             right: 15px;
             font-size: 20px; 
             cursor: pointer; 
             color: #fff;
             background: #e11d48; 
-            width: 40px; 
-            height: 40px; 
+            width: 35px; 
+            height: 35px; 
             border-radius: 50%;
             display: flex; 
             align-items: center; 
@@ -293,9 +291,7 @@
             font-size: 2.5rem; color: #fff; background: rgba(225, 29, 72, 0.8);
             border-radius: 50%; width: 50px; height: 50px; display: flex;
             justify-content: center; align-items: center; box-shadow: 0 0 15px #e11d48;
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
 
         /* الموسيقى */
         .music-btn {
@@ -303,9 +299,8 @@
             background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 0 10px rgba(225, 29, 72, 0.6);
-            transition: all 0.3s; animation: pulse-btn 2s infinite;
+            transition: all 0.3s;
         }
-        @keyframes pulse-btn { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
 
         .gradient-text {
             background: linear-gradient(to right, #ff9a9e, #fecfef, #fff);
@@ -366,12 +361,11 @@
                 <div class="year-badge">
                    <span class="text-rose-500 font-bold">اتجمعنا في 2025</span>
                    <i class="fas fa-arrow-left text-rose-500 text-xs mx-1"></i>
-                   <span class="text-rose-500 font-bold animate-pulse">ومكلمين 2026سوا♥</span>
+                   <span class="text-rose-500 font-bold animate-pulse">ومكملين 2026سوا♥</span>
                 </div>
 
                 <h1 class="text-3xl md:text-5xl font-bold mb-2 font-english text-rose-500">Happy New Year</h1>
                 
-                <!-- نقل القلب لليمين -->
                 <div class="w-full flex justify-center items-center">
                     <h2 class="text-3xl md:text-5xl font-bold mb-3 text-center w-full">
                         <i class="fa-solid fa-heart text-red-600 animate-bounce inline-block text-xl ml-2"></i>
@@ -388,9 +382,8 @@
                 </button>
             </section>
 
-            <!-- نافذة الرسالة (كصفحة كاملة) -->
+            <!-- نافذة الرسالة -->
             <div id="letterModal" class="modal">
-                <!-- زر إغلاق الصفحة -->
                 <div class="close-page-btn" onclick="closeModal()">
                     <i class="fas fa-times"></i>
                 </div>
@@ -406,7 +399,7 @@
                     <p>
                         كل سنه وانتي حبيبتي وروحي وبنوتي وموزتي وغالية عليا. كل سنه وانتي في حياتي وحياتي وعمري وكل حاجه حلوه.
                     </p>
-                    <p class="text-center mt-6 text-rose-300">
+                    <p class="text-center mt-4 text-rose-300">
                         ربنا يجمعنا بالخير ونفضل السنين الي جاية سوا.. بحبك🫶🏻
                     </p>
                 </div>
@@ -475,22 +468,22 @@
                 </div>
             </section>
 
-            <!-- السلايدر -->
+            <!-- السلايدر تم تطبيق خدمة wsrv لتصغير حجم الصور لمنع اللاج -->
             <section class="w-full mb-12 overflow-hidden">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4">شوفتي القمر</h3>
                 <div class="slider-container">
                     <div class="slider-track" id="slider-track">
-                        <div class="slider-item" onclick="openLightbox(this.querySelector('img').src)">
-                            <img src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg" alt="1">
+                        <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=800&output=webp')">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=300&output=webp" loading="lazy" alt="1">
                         </div>
-                        <div class="slider-item" onclick="openLightbox(this.querySelector('img').src)">
-                            <img src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg" alt="2">
+                        <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg&w=800&output=webp')">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg&w=300&output=webp" loading="lazy" alt="2">
                         </div>
-                        <div class="slider-item" onclick="openLightbox(this.querySelector('img').src)">
-                            <img src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg" alt="3">
+                        <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg&w=800&output=webp')">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg&w=300&output=webp" loading="lazy" alt="3">
                         </div>
-                        <div class="slider-item" onclick="openLightbox(this.querySelector('img').src)">
-                            <img src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg" alt="4">
+                        <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=800&output=webp')">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=300&output=webp" loading="lazy" alt="4">
                         </div>
                     </div>
                 </div>
@@ -500,7 +493,7 @@
             <section class="w-full max-w-4xl px-4">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4"> موزتي جميلة ومميزة</h3>
                 <div class="video-wrapper group">
-                    <video id="video1" playsinline loop preload="metadata">
+                    <video id="video1" playsinline loop preload="none">
                         <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/795184b0ad13dd537fd64eb6208a05774bb399d1/lv_0_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A2%D9%A0%D9%A1%D9%A0%D9%A1%D9%A3%D9%A2.mp4#t=0.1" type="video/mp4">
                     </video>
                     <div class="play-overlay" onclick="toggleVideo('video1', this)">
@@ -508,7 +501,7 @@
                     </div>
                 </div>
                 <div class="video-wrapper group">
-                    <video id="video2" playsinline loop preload="metadata">
+                    <video id="video2" playsinline loop preload="none">
                         <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A3_%D9%A2%D9%A1%D9%A0%D9%A9%D9%A1%D9%A3.mp4#t=0.1" type="video/mp4">
                     </video>
                     <div class="play-overlay" onclick="toggleVideo('video2', this)">
@@ -526,15 +519,6 @@
     </div>
 
     <script>
-        // تسجيل Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker Registered!', reg))
-                    .catch(err => console.log('Service Worker Failed', err));
-            });
-        }
-
         const START_DATE_STRING = "2025-11-23T03:20:00"; 
 
         function adjustView() {
@@ -573,7 +557,8 @@
         function initSiteContent() {
             startCounter();
             initSlider();
-            setInterval(createHeart, 800); 
+            // تم زيادة الوقت بين ظهور القلوب لتخفيف اللاج
+            setInterval(createHeart, 1200); 
         }
 
         function startCounter() {
@@ -665,7 +650,8 @@
         }
 
         function createHeart() {
-            if(document.getElementsByClassName('heart').length > 20) return;
+            // تقليل عدد القلوب المتواجدة معاً في نفس الوقت إلى 15 لمنع اللاج
+            if(document.getElementsByClassName('heart').length > 15) return;
             const h = document.createElement('div');
             h.classList.add('heart');
             h.innerHTML = '❤';
@@ -681,15 +667,12 @@
             t.innerHTML += t.innerHTML + t.innerHTML;
         }
 
-        /* --- تعديل لفتح وإغلاق الرسالة بدون لاج --- */
         function openModal() { 
             document.getElementById('letterModal').style.display = 'flex'; 
-            // إيقاف التمرير في الصفحة الرئيسية لتقليل الضغط على الهاتف
             document.body.style.overflow = 'hidden'; 
         }
         function closeModal() { 
             document.getElementById('letterModal').style.display = 'none'; 
-            // إعادة التمرير بعد إغلاق الرسالة
             document.body.style.overflow = 'auto'; 
         }
         
