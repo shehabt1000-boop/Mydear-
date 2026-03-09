@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="preload" as="image" href="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg">
-    <!-- صورة الرسالة الجديدة (ظرف رومانسي) -->
-    <link rel="preload" as="image" href="https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=600?auto=compress&cs=tinysrgb&w=600">
+    <!-- صورة الرسالة الجديدة (تم تصغير العرض إلى 400 لسرعة التحميل) -->
+    <link rel="preload" as="image" href="https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=400">
 
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -204,48 +204,82 @@
             border: 2px solid #fb7185; padding: 5px;
         }
 
-        /* --- نافذة الرسالة --- */
+        /* --- نافذة الرسالة (تم تحويلها لصفحة كاملة سريعة) --- */
         .modal {
-            display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85); 
-            backdrop-filter: blur(8px);
-            align-items: center; justify-content: center;
+            display: none; 
+            position: fixed; 
+            z-index: 999999; /* لضمان تغطية كل شيء */
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100vh;
+            height: 100lvh; /* لدعم شاشات الموبايل الحديثة */
+            background-color: #050505; /* لون أسود صلب لمنع اللاج بدلاً من الشفافية والتغبيش */
+            align-items: flex-start; /* لتفعيل التمرير إذا كانت الرسالة طويلة */
+            justify-content: center;
+            overflow-y: auto; /* السماح بالنزول والصعود */
+            padding: 20px 0;
+            animation: slideUp 0.3s ease-out; /* حركة فتح سلسة */
         }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         .paper {
-            /* 3. خلفية جديدة (ظرف رومانسي) */
-            background-image: url('https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=600?auto=compress&cs=tinysrgb&w=600');
+            /* خلفية مصغرة w=400 لسرعة التحميل */
+            background-image: url('https://images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg?auto=compress&cs=tinysrgb&w=400');
             background-size: cover;
             background-position: center;
             color: #ffe4e6;
-            width: 85%; max-width: 320px;
-            padding: 35px 20px 20px 20px;
+            width: 95%; 
+            max-width: 500px;
+            min-height: 85vh; /* أخذ معظم مساحة الشاشة لتشبه الصفحة */
+            padding: 60px 20px 30px 20px;
             border-radius: 15px; 
             border: 2px solid #fb7185;
-            box-shadow: 0 0 30px rgba(159, 18, 57, 0.4);
-            font-family: 'Marck Script', cursive; font-size: 0.8rem; line-height: 1.5;
-            position: relative; transform: rotate(-1deg);
-            overflow: hidden;
-            /* إزالة backdrop-filter من هنا لمنع اللاج */
-            backdrop-filter: none;
+            box-shadow: 0 0 20px rgba(159, 18, 57, 0.2); /* تقليل الظل لتخفيف الريندر */
+            font-family: 'Marck Script', cursive; 
+            font-size: 1.1rem; /* تكبير الخط قليلاً ليكون مريحاً للقراءة */
+            line-height: 1.8;
+            position: relative; 
+            margin: auto;
         }
+        
         .paper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* تغميق خفيف */
+            background: rgba(0, 0, 0, 0.65); /* تغميق لتحسين قراءة النص */
             z-index: 0;
+            border-radius: 13px;
         }
-        .paper * { position: relative; z-index: 1; }
+        
+        .paper p { position: relative; z-index: 1; margin-bottom: 15px; text-shadow: none; font-weight: bold; }
 
-        .paper-close {
-            position: absolute; top: 8px; right: 12px;
-            font-family: sans-serif; font-size: 22px; cursor: pointer; color: #fff;
-            background: rgba(0,0,0,0.3); width: 28px; height: 28px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+        /* زر الإغلاق أصبح ثابتاً في الشاشة مثل زر الرجوع للخلف */
+        .close-page-btn {
+            position: fixed; 
+            top: 15px; 
+            right: 15px;
+            font-size: 20px; 
+            cursor: pointer; 
+            color: #fff;
+            background: #e11d48; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            z-index: 9999999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            border: 2px solid #fff;
         }
 
-        /* --- الفيديو (1. زيادة الطول) --- */
+        /* --- الفيديو --- */
         .video-wrapper {
             position: relative; width: 100%; max-width: 600px; 
-            height: 65vh; /* زيادة الارتفاع ليظهر الفيديو كاملاً */
+            height: 65vh;
             margin: 0 auto 1.5rem auto; border-radius: 15px; overflow: hidden;
             box-shadow: 0 5px 20px rgba(225, 29, 72, 0.3); border: 1px solid #e11d48; background-color: #000;
         }
@@ -337,7 +371,7 @@
 
                 <h1 class="text-3xl md:text-5xl font-bold mb-2 font-english text-rose-500">Happy New Year</h1>
                 
-                <!-- 2. نقل القلب لليمين (قبل الاسم في RTL) -->
+                <!-- نقل القلب لليمين -->
                 <div class="w-full flex justify-center items-center">
                     <h2 class="text-3xl md:text-5xl font-bold mb-3 text-center w-full">
                         <i class="fa-solid fa-heart text-red-600 animate-bounce inline-block text-xl ml-2"></i>
@@ -354,17 +388,26 @@
                 </button>
             </section>
 
-            <!-- نافذة الرسالة -->
+            <!-- نافذة الرسالة (كصفحة كاملة) -->
             <div id="letterModal" class="modal">
+                <!-- زر إغلاق الصفحة -->
+                <div class="close-page-btn" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </div>
+                
                 <div class="paper">
-                    <span class="paper-close" onclick="closeModal()">&times;</span>
-                    <p>تعرفي يايويو </p>
+                    <p>تعرفي يايويو،</p>
                     <p>
-                        يوم 23/11 حياتي اتغيرت.  اليوم ده  كان البداية لكل حاجة حلوة. اليوم الي حسيت في  ان بقا في حياتي  كل حاجه كانت نقصاني حسيت اني كسبت حب البنوتة الوحيدة الي ارتحت معاها  وحبيت حياتي معاها وهي صحبتي قبل متكون حبيبتي  . بمجرد مقولتيلي انك بتحبيني  حسيت اني مطمن وان حبيبتي هتكون معايا   ومش هتسيبني تاني  . انا محظوظ بيكي  يا اجمل بنوتة. خلينا نبدا 2026سوا  ونبدا حياتنا من جديد  وتكون السنه دي بداية لكل حاجه حلوة  بينا  زي مكان يوم اعترافك ليا بداية كل حاجه حلوة في حياتي  
-كل سنه وانتي حبيبتي وروحي وبنوتي وموزتي وغالية عليا  . كل سنه وانتي في حياتي وحياتي وعمري وكل حاجه حلوه 
+                        يوم 23/11 حياتي اتغيرت. اليوم ده كان البداية لكل حاجة حلوة. اليوم الي حسيت فيه ان بقا في حياتي كل حاجه كانت نقصاني حسيت اني كسبت حب البنوتة الوحيدة الي ارتحت معاها وحبيت حياتي معاها وهي صحبتي قبل متكون حبيبتي.
                     </p>
                     <p>
-                        ربنا يجمعنا بالخير ونفضل السنين الي  جاية سوا.. بحبك🫶🏻
+                        بمجرد مقولتيلي انك بتحبيني حسيت اني مطمن وان حبيبتي هتكون معايا ومش هتسيبني تاني. انا محظوظ بيكي يا اجمل بنوتة. خلينا نبدا 2026 سوا ونبدا حياتنا من جديد وتكون السنه دي بداية لكل حاجه حلوة بينا زي مكان يوم اعترافك ليا بداية كل حاجه حلوة في حياتي.
+                    </p>
+                    <p>
+                        كل سنه وانتي حبيبتي وروحي وبنوتي وموزتي وغالية عليا. كل سنه وانتي في حياتي وحياتي وعمري وكل حاجه حلوه.
+                    </p>
+                    <p class="text-center mt-6 text-rose-300">
+                        ربنا يجمعنا بالخير ونفضل السنين الي جاية سوا.. بحبك🫶🏻
                     </p>
                 </div>
             </div>
@@ -638,8 +681,17 @@
             t.innerHTML += t.innerHTML + t.innerHTML;
         }
 
-        function openModal() { document.getElementById('letterModal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('letterModal').style.display = 'none'; }
+        /* --- تعديل لفتح وإغلاق الرسالة بدون لاج --- */
+        function openModal() { 
+            document.getElementById('letterModal').style.display = 'flex'; 
+            // إيقاف التمرير في الصفحة الرئيسية لتقليل الضغط على الهاتف
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeModal() { 
+            document.getElementById('letterModal').style.display = 'none'; 
+            // إعادة التمرير بعد إغلاق الرسالة
+            document.body.style.overflow = 'auto'; 
+        }
         
         function openLightbox(src) {
             const lb = document.getElementById('lightbox');
