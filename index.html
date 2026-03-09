@@ -11,31 +11,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Great+Vibes&family=Marck+Script&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- تحميل الخلفية مصغرة ومحسنة كـ WebP لسرعة الصاروخ -->
-    <link rel="preload" as="image" href="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=80">
-    <!-- صورة الرسالة مصغرة -->
-    <link rel="preload" as="image" href="https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=80">
+    <!-- تحميل الخلفيات مبكراً -->
+    <link rel="preload" as="image" href="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=70">
+    <link rel="preload" as="image" href="https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=70">
 
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
+        /* الخلفية الأصلية للموقع */
         #fixed-background {
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100vh; 
-            height: 100lvh; 
-            /* استخدام الصورة المحسنة */
-            background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=80');
-            background-size: cover;
-            background-position: center top; 
-            z-index: -10;
-            background-repeat: no-repeat;
-            pointer-events: none;
-            /* تسريع الرسوميات لمنع اللاج */
-            transform: translateZ(0); 
-            will-change: transform;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; 
+            background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=70');
+            background-size: cover; background-position: center top; 
+            z-index: -10; background-repeat: no-repeat; pointer-events: none;
+            transform: translateZ(0); will-change: transform;
         }
 
         #fixed-background::after {
@@ -44,221 +33,127 @@
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #000000;
-            color: #fff;
-            overflow-x: hidden;
-            position: relative;
-            margin: 0;
-            padding-bottom: 20px;
-            min-height: 100vh;
+            font-family: 'Cairo', sans-serif; background-color: #000; color: #fff;
+            overflow-x: hidden; position: relative; margin: 0; padding-bottom: 20px; min-height: 100vh;
         }
 
         .font-english { font-family: 'Great Vibes', cursive; }
         .font-handwriting { font-family: 'Marck Script', cursive; }
 
-        /* --- شاشات الدخول والتحميل --- */
+        /* شاشات الدخول والتحميل */
         #login-screen, #loading-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999;
+            z-index: 9999; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; transition: opacity 0.5s ease-out;
             background: transparent;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease-out;
         }
         
         #login-screen::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: -1;
+            background: rgba(0, 0, 0, 0.4); z-index: -1;
         }
+        
+        #loading-screen { background: rgba(0,0,0,0.8); }
 
-        /* --- أيقونة التحميل --- */
-        .loader-container {
-            position: relative; width: 80px; height: 80px;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .spinner-ring {
-            position: absolute; width: 100%; height: 100%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #e11d48;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        .loader-heart {
-            font-size: 2rem; color: #e11d48;
-            animation: pulse-heart 1s infinite alternate;
-        }
+        .loader-container { position: relative; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; }
+        .spinner-ring { position: absolute; width: 100%; height: 100%; border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #e11d48; border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader-heart { font-size: 2rem; color: #e11d48; animation: pulse-heart 1s infinite alternate; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse-heart { from { transform: scale(0.8); opacity: 0.8; } to { transform: scale(1.1); opacity: 1; } }
 
-        /* --- حقل الإدخال --- */
         .input-glass {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: white; padding: 12px; border-radius: 50px;
-            text-align: center; font-size: 1.2rem; letter-spacing: 2px;
-            width: 75%; max-width: 200px; outline: none; margin-bottom: 20px;
-            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white; padding: 12px; border-radius: 50px; text-align: center; font-size: 1.2rem; 
+            letter-spacing: 2px; width: 75%; max-width: 200px; outline: none; margin-bottom: 20px; transition: border-color 0.3s;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         .input-glass:focus { border-color: #fb7185; background: rgba(255,255,255,0.3); }
         
-        h1, h2, p, span, button, div { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-
+        h1, h2, p, span, button, div { text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
+        
         .hidden-content { display: none !important; }
 
-        /* --- القلوب --- */
-        .heart-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0; overflow: hidden;
-        }
-        .heart {
-            position: absolute; font-size: 1rem;
-            color: rgba(229, 62, 62, 0.8);
-            will-change: transform, opacity; animation-name: fall;
-            animation-timing-function: linear; animation-fill-mode: forwards;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
+        /* القلوب */
+        .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .heart { position: absolute; font-size: 1rem; color: rgba(229, 62, 62, 0.8); will-change: transform, opacity; animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; }
+        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
 
-        /* --- الكروت الزجاجية --- */
-        .glass-card {
-            background: rgba(0, 0, 0, 0.5); 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        .year-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, 0.5); padding: 6px 16px; border-radius: 50px; margin-bottom: 30px; font-size: 0.85rem; border: 1px solid rgba(225, 29, 72, 0.5); max-width: 95%; }
 
-        /* --- شارة السنوات --- */
-        .year-badge {
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            background: rgba(0, 0, 0, 0.5); 
-            padding: 6px 16px; border-radius: 50px;
-            margin-bottom: 30px; font-size: 0.85rem;
-            border: 1px solid rgba(225, 29, 72, 0.5);
-            max-width: 95%;
-        }
-
-        /* --- السلايدر --- */
-        .slider-container { 
-            overflow: hidden; white-space: nowrap; position: relative; padding: 10px 0; 
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
+        /* السلايدر */
+        .slider-container { overflow: hidden; white-space: nowrap; position: relative; padding: 10px 0; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
         .slider-track { display: inline-block; animation: scroll 60s linear infinite; will-change: transform; }
-        .slider-item {
-            display: inline-block; width: 180px; height: 250px;
-            margin: 0 6px;
-            border-radius: 10px; overflow: hidden; border: 2px solid #e11d48;
-            transition: transform 0.3s; position: relative; cursor: pointer;
-        }
+        .slider-item { display: inline-block; width: 180px; height: 250px; margin: 0 6px; border-radius: 10px; overflow: hidden; border: 2px solid #e11d48; transition: transform 0.3s; position: relative; cursor: pointer; background: #111; }
         .slider-item img { width: 100%; height: 100%; object-fit: cover; }
-        
         html[dir="rtl"] .slider-track { animation: scrollRTL 60s linear infinite; }
         @keyframes scrollRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
 
-        /* --- عارض الصور --- */
-        #lightbox {
-            position: fixed; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center;
-        }
+        /* عارض الصور */
+        #lightbox { position: fixed; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
         #lightbox img { max-width: 95%; max-height: 80vh; object-fit: contain; border-radius: 10px; border: 2px solid #e11d48; }
-        #lightbox-close {
-            position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer;
-            background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
+        #lightbox-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer; background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* --- كروت الحب --- */
-        .flip-card {
-            background-color: transparent; width: 100%; height: 110px;
-            perspective: 1000px; cursor: pointer;
-        }
-        .flip-card-inner {
-            position: relative; width: 100%; height: 100%; text-align: center;
-            transition: transform 0.6s; transform-style: preserve-3d;
-        }
+        /* كروت الحب */
+        .flip-card { background-color: transparent; width: 100%; height: 110px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-card-front, .flip-card-back {
-            position: absolute; width: 100%; height: 100%;
-            -webkit-backface-visibility: hidden; backface-visibility: hidden;
-            border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px;
-        }
-        .flip-card-front {
-            background: linear-gradient(45deg, #e11d48, #ff9a9e);
-            color: white; font-weight: bold; font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .flip-card-back {
-            background: linear-gradient(to bottom, #9f1239, #500724); 
-            color: #ffe4e6;
-            transform: rotateY(180deg);
-            font-family: 'Marck Script', cursive; font-size: 1.2rem;
-            border: 2px solid #fb7185; padding: 5px;
-        }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px; }
+        .flip-card-front { background: linear-gradient(45deg, #e11d48, #ff9a9e); color: white; font-weight: bold; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .flip-card-back { background: linear-gradient(to bottom, #9f1239, #500724); color: #ffe4e6; transform: rotateY(180deg); font-family: 'Marck Script', cursive; font-size: 1.2rem; border: 2px solid #fb7185; padding: 5px; }
 
-        /* --- نافذة الرسالة (تم ضبط الحجم بدقة لشاشات الهواتف) --- */
-        .modal {
+        /* نافذة الرسالة (تم رفعها لأعلى الشاشة وتصليح الزر والميلان) */
+        .modal { 
             display: none; 
             position: fixed; 
-            z-index: 999999; 
+            z-index: 100; 
             left: 0; 
             top: 0; 
             width: 100%; 
             height: 100vh;
-            height: 100lvh; 
-            background-color: #050505; 
-            align-items: center; /* توسيط عمودي */
+            height: 100lvh;
+            background-color: rgba(0, 0, 0, 0.85); /* خلفية داكنة خفيفة تمنع اللاج */
+            align-items: flex-start; /* رفع الرسالة لأعلى الشاشة */
             justify-content: center;
-            padding: 15px;
-            animation: slideUp 0.3s ease-out; 
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            padding-top: 5vh; /* مسافة بسيطة من السقف */
+            overflow-y: auto; /* للسماح بالتمرير إذا كانت الشاشة صغيرة */
+            padding-bottom: 20px;
         }
 
         .paper {
-            background-image: url('https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp');
+            /* خلفية الرسالة الأصلية مصغرة للسرعة */
+            background-image: url('https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=70');
             background-size: cover;
             background-position: center;
             color: #ffe4e6;
-            width: 95%; 
-            max-width: 450px;
-            height: auto;
-            max-height: 85vh; /* يمنع الورقة من تخطي حجم الشاشة */
-            overflow-y: auto; /* يسمح بتمرير النص داخل الورقة فقط إذا كان طويلاً */
-            padding: 30px 15px 20px 15px; /* تقليل الحواف لزيادة مساحة النص */
+            width: 90%; 
+            max-width: 380px;
+            padding: 35px 20px 20px 20px;
             border-radius: 15px; 
             border: 2px solid #fb7185;
+            box-shadow: 0 0 30px rgba(159, 18, 57, 0.4);
             font-family: 'Marck Script', cursive; 
-            font-size: 1.1rem; 
-            line-height: 1.7;
+            font-size: 1rem; 
+            line-height: 1.6;
             position: relative; 
-            box-shadow: 0 0 15px rgba(159, 18, 57, 0.4);
+            margin: 0 auto; /* توسيط أفقي */
+            transform: none; /* إزالة الميلان (كانت مايلة بالسالب) */
         }
-        
-        /* إخفاء شريط التمرير (السكرول) لجمالية الرسالة */
-        .paper::-webkit-scrollbar { display: none; }
-        .paper { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .paper::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.65); 
-            z-index: 0;
-            border-radius: 13px;
-            pointer-events: none; /* لعدم إعاقة التمرير */
-        }
-        
-        .paper p { position: relative; z-index: 1; margin-bottom: 12px; font-weight: bold; }
 
-        .close-page-btn {
+        .paper::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* تغميق خفيف لتحسين قراءة النص */
+            z-index: 0; border-radius: 13px;
+        }
+
+        .paper * { position: relative; z-index: 1; }
+
+        /* زر الإغلاق لازق في الرسالة من فوق */
+        .paper-close {
             position: absolute; 
-            top: 15px; 
-            right: 15px;
+            top: -12px;  /* الزر طالع برا الرسالة حتة صغيرة من فوق */
+            right: -10px; /* وطالع برا حتة صغيرة من اليمين */
+            font-family: sans-serif; 
             font-size: 20px; 
             cursor: pointer; 
             color: #fff;
@@ -269,143 +164,104 @@
             display: flex; 
             align-items: center; 
             justify-content: center;
-            z-index: 9999999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             border: 2px solid #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
-        /* --- الفيديو --- */
-        .video-wrapper {
-            position: relative; width: 100%; max-width: 600px; 
-            height: 65vh;
-            margin: 0 auto 1.5rem auto; border-radius: 15px; overflow: hidden;
-            box-shadow: 0 5px 20px rgba(225, 29, 72, 0.3); border: 1px solid #e11d48; background-color: #000;
-        }
+        /* الفيديو */
+        .video-wrapper { position: relative; width: 100%; max-width: 600px; height: 65vh; margin: 0 auto 1.5rem auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(225, 29, 72, 0.3); border: 1px solid #e11d48; background-color: #000; }
         .video-wrapper video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .play-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center;
-            cursor: pointer; transition: opacity 0.3s; z-index: 2;
-        }
-        .play-icon {
-            font-size: 2.5rem; color: #fff; background: rgba(225, 29, 72, 0.8);
-            border-radius: 50%; width: 50px; height: 50px; display: flex;
-            justify-content: center; align-items: center; box-shadow: 0 0 15px #e11d48;
-        }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; cursor: pointer; transition: opacity 0.3s; z-index: 2; }
+        .play-icon { font-size: 2.5rem; color: #fff; background: rgba(225, 29, 72, 0.8); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px #e11d48; }
 
-        /* الموسيقى */
-        .music-btn {
-            position: fixed; bottom: 20px; left: 20px; z-index: 50;
-            background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 10px rgba(225, 29, 72, 0.6);
-            transition: all 0.3s;
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #ff9a9e, #fecfef, #fff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .music-btn { position: fixed; bottom: 20px; left: 20px; z-index: 50; background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(225, 29, 72, 0.6); transition: all 0.3s; }
+        .gradient-text { background: linear-gradient(to right, #ff9a9e, #fecfef, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- الخلفية المثبتة -->
     <div id="fixed-background"></div>
-
+    
     <!-- عارض الصور -->
     <div id="lightbox">
         <div id="lightbox-close" onclick="closeLightbox()">&times;</div>
         <img id="lightbox-img" src="" alt="Full Image">
     </div>
 
-    <!-- 1. شاشة الدخول -->
+    <!-- شاشة الدخول -->
     <div id="login-screen">
         <div class="relative z-10 flex flex-col items-center w-full">
             <i class="fas fa-heart text-rose-500 text-4xl mb-4 animate-pulse drop-shadow-lg"></i>
             <h2 class="text-lg text-white font-bold mb-6 drop-shadow-md">كلمة السر تاريخنا</h2>
             <input type="password" id="pass-input" inputmode="numeric" pattern="[0-9]*" class="input-glass" placeholder="DDMMYYYY" maxlength="8" onfocus="adjustView()">
-            <button onclick="checkPassword()" class="mt-2 px-8 py-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-full font-bold shadow-lg transform transition active:scale-95 text-sm border border-white/20">
+            <button onclick="startTruePreload()" class="mt-2 px-8 py-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-full font-bold shadow-lg transform transition active:scale-95 text-sm border border-white/20">
                 دخول
             </button>
             <p id="error-msg" class="text-rose-300 mt-4 text-xs hidden font-bold drop-shadow-md">التاريخ غلط.. فكري تاني 😉</p>
         </div>
     </div>
 
-    <!-- 2. شاشة التحميل -->
+    <!-- شاشة التحميل الحقيقية -->
     <div id="loading-screen" class="hidden-content">
         <div class="loader-container">
             <div class="spinner-ring"></div>
             <i class="fas fa-heart loader-heart"></i>
         </div>
         <p class="text-white mt-6 text-lg font-handwriting drop-shadow-md">بجهزلك المفاجأة...</p>
+        <p class="text-rose-400 mt-2 text-xs font-bold" id="loading-progress">جاري تحميل الذكريات 0%</p>
     </div>
 
-    <!-- 3. المحتوى الرئيسي -->
+    <!-- المحتوى الرئيسي -->
     <div id="main-content" class="hidden-content">
-        
         <div class="heart-bg" id="heart-bg"></div>
-
         <div class="music-btn" onclick="toggleMusic()">
             <i class="fas fa-music text-white" id="music-icon"></i>
         </div>
         
-        <audio id="bg-music" loop>
+        <audio id="bg-music" loop preload="none">
             <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/526555caded86fbbf5a92f01da612e5f2631dbbd/audio_695534a4c976e.mp3" type="audio/mpeg">
         </audio>
 
         <main class="relative z-10 w-full min-h-screen flex flex-col items-center pb-20">
-            
             <section class="text-center pt-10 px-4 mb-6 w-full">
-                
                 <div class="year-badge">
                    <span class="text-rose-500 font-bold">اتجمعنا في 2025</span>
                    <i class="fas fa-arrow-left text-rose-500 text-xs mx-1"></i>
                    <span class="text-rose-500 font-bold animate-pulse">ومكملين 2026سوا♥</span>
                 </div>
-
                 <h1 class="text-3xl md:text-5xl font-bold mb-2 font-english text-rose-500">Happy New Year</h1>
-                
                 <div class="w-full flex justify-center items-center">
                     <h2 class="text-3xl md:text-5xl font-bold mb-3 text-center w-full">
                         <i class="fa-solid fa-heart text-red-600 animate-bounce inline-block text-xl ml-2"></i>
                         <span class="gradient-text">Aya</span> 
                     </h2>
                 </div>
-
                 <p class="text-base md:text-lg text-gray-300 max-w-xs mx-auto leading-relaxed">
                     كل سنة وانتي معايا، كل سنة وانتي أجمل حاجة حصلت في حياتي
                 </p>
-                
                 <button onclick="openModal()" class="mt-5 px-6 py-2 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full text-white font-bold shadow-lg hover:shadow-rose-500/50 transform hover:scale-105 transition duration-300 text-sm">
                     <i class="fas fa-envelope-open-text ml-2"></i> رسالة خاصة ليكي
                 </button>
             </section>
 
-            <!-- نافذة الرسالة -->
+            <!-- نافذة الرسالة (النص الأصلي بالكامل وزر الإغلاق متصل بها) -->
             <div id="letterModal" class="modal">
-                <div class="close-page-btn" onclick="closeModal()">
-                    <i class="fas fa-times"></i>
-                </div>
-                
                 <div class="paper">
-                    <p>تعرفي يايويو،</p>
+                    <div class="paper-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
+                    
+                    <p>تعرفي يايويو </p>
                     <p>
-                        يوم 23/11 حياتي اتغيرت. اليوم ده كان البداية لكل حاجة حلوة. اليوم الي حسيت فيه ان بقا في حياتي كل حاجه كانت نقصاني حسيت اني كسبت حب البنوتة الوحيدة الي ارتحت معاها وحبيت حياتي معاها وهي صحبتي قبل متكون حبيبتي.
+                        يوم 23/11 حياتي اتغيرت. اليوم ده كان البداية لكل حاجة حلوة. اليوم الي حسيت في ان بقا في حياتي كل حاجه كانت نقصاني حسيت اني كسبت حب البنوتة الوحيدة الي ارتحت معاها وحبيت حياتي معاها وهي صحبتي قبل متكون حبيبتي . بمجرد مقولتيلي انك بتحبيني حسيت اني مطمن وان حبيبتي هتكون معايا ومش هتسيبني تاني . انا محظوظ بيكي يا اجمل بنوتة. خلينا نبدا 2026سوا ونبدا حياتنا من جديد وتكون السنه دي بداية لكل حاجه حلوة بينا زي مكان يوم اعترافك ليا بداية كل حاجه حلوة في حياتي<br>
+                        كل سنه وانتي حبيبتي وروحي وبنوتي وموزتي وغالية عليا . كل سنه وانتي في حياتي وحياتي وعمري وكل حاجه حلوه 
                     </p>
                     <p>
-                        بمجرد مقولتيلي انك بتحبيني حسيت اني مطمن وان حبيبتي هتكون معايا ومش هتسيبني تاني. انا محظوظ بيكي يا اجمل بنوتة. خلينا نبدا 2026 سوا ونبدا حياتنا من جديد وتكون السنه دي بداية لكل حاجه حلوة بينا زي مكان يوم اعترافك ليا بداية كل حاجه حلوة في حياتي.
-                    </p>
-                    <p>
-                        كل سنه وانتي حبيبتي وروحي وبنوتي وموزتي وغالية عليا. كل سنه وانتي في حياتي وحياتي وعمري وكل حاجه حلوه.
-                    </p>
-                    <p class="text-center mt-4 text-rose-300">
                         ربنا يجمعنا بالخير ونفضل السنين الي جاية سوا.. بحبك🫶🏻
                     </p>
                 </div>
             </div>
 
-            <!-- قسم العداد -->
             <section class="w-[90%] max-w-[300px] px-2 mb-10">
                 <div class="glass-card p-2 text-center">
                     <h3 class="text-xl font-bold text-rose-400 mb-2">بداية حكايتنا</h3>
@@ -413,23 +269,18 @@
                         في يوم <span class="font-bold text-white">23/11/2025</span> الساعة <span class="font-bold text-white">3:20</span>
                         <br>اللحظة اللي غيرت كل حاجة لما اعترفتي بحبك ليا.. ومن هنا بدأ العمر يحلو.
                     </p>
-                    
                     <div class="grid grid-cols-4 gap-1 text-center" id="counter">
                         <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="days">0</span>
-                            <span class="text-[9px] text-rose-300">يوم</span>
+                            <span class="block text-sm font-bold text-white" id="days">0</span><span class="text-[9px] text-rose-300">يوم</span>
                         </div>
                         <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="hours">0</span>
-                            <span class="text-[9px] text-rose-300">ساعة</span>
+                            <span class="block text-sm font-bold text-white" id="hours">0</span><span class="text-[9px] text-rose-300">ساعة</span>
                         </div>
                         <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="minutes">0</span>
-                            <span class="text-[9px] text-rose-300">دقيقة</span>
+                            <span class="block text-sm font-bold text-white" id="minutes">0</span><span class="text-[9px] text-rose-300">دقيقة</span>
                         </div>
                         <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="seconds">0</span>
-                            <span class="text-[9px] text-rose-300">ثانية</span>
+                            <span class="block text-sm font-bold text-white" id="seconds">0</span><span class="text-[9px] text-rose-300">ثانية</span>
                         </div>
                     </div>
                     <p id="future-msg" class="mt-2 text-[10px] text-yellow-400 hidden">لسه التاريخ مجاش.. بنجهز للبداية 😉</p>
@@ -437,76 +288,51 @@
                 </div>
             </section>
 
-            <!-- قسم كروت الحب -->
             <section class="w-full max-w-4xl px-4 mb-12">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4">ليه بحبك؟ <span class="text-xs text-gray-400 block mt-1">(الاجابة⬇️)</span></h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front"><i class="fas fa-heart text-lg mb-1 block w-full"></i>السبب الأول</div>
-                            <div class="flip-card-back">مقدرش اعيش من غيرك</div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front"><i class="fas fa-star text-lg mb-1 block w-full"></i>السبب التاني</div>
-                            <div class="flip-card-back">عشان بتفهميني من عيني وبعشق عيونك</div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front"><i class="fas fa-smile text-lg mb-1 block w-full"></i>السبب التالت</div>
-                            <div class="flip-card-back">ضحكتك اللي بتنور يومي وبتنسيني همومي</div>
-                        </div>
-                    </div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front"><i class="fas fa-infinity text-lg mb-1 block w-full"></i>السبب الرابع</div>
-                            <div class="flip-card-back">عشان إنتي Aya</div>
-                        </div>
-                    </div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-heart text-lg mb-1 block w-full"></i>السبب الأول</div><div class="flip-card-back">مقدرش اعيش من غيرك</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-star text-lg mb-1 block w-full"></i>السبب التاني</div><div class="flip-card-back">عشان بتفهميني من عيني وبعشق عيونك</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-smile text-lg mb-1 block w-full"></i>السبب التالت</div><div class="flip-card-back">ضحكتك اللي بتنور يومي وبتنسيني همومي</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-infinity text-lg mb-1 block w-full"></i>السبب الرابع</div><div class="flip-card-back">عشان إنتي Aya</div></div></div>
                 </div>
             </section>
 
-            <!-- السلايدر تم تطبيق خدمة wsrv لتصغير حجم الصور لمنع اللاج -->
+            <!-- السلايدر الأصلي (الصور مصغرة أثناء التحميل، وتفتح بجودة 800) -->
             <section class="w-full mb-12 overflow-hidden">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4">شوفتي القمر</h3>
                 <div class="slider-container">
                     <div class="slider-track" id="slider-track">
                         <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=800&output=webp')">
-                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=300&output=webp" loading="lazy" alt="1">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=300&output=webp&q=60" alt="1">
                         </div>
                         <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg&w=800&output=webp')">
-                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg&w=300&output=webp" loading="lazy" alt="2">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A2%D9%A3%D9%A1(1).jpg&w=300&output=webp&q=60" alt="2">
                         </div>
                         <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg&w=800&output=webp')">
-                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg&w=300&output=webp" loading="lazy" alt="3">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A0%D9%A2%D9%A4(1).jpg&w=300&output=webp&q=60" alt="3">
                         </div>
                         <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=800&output=webp')">
-                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=300&output=webp" loading="lazy" alt="4">
+                            <img src="https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=300&output=webp&q=60" alt="4">
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- الفيديوهات -->
+            <!-- الفيديوهات الأصلية -->
             <section class="w-full max-w-4xl px-4">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4"> موزتي جميلة ومميزة</h3>
                 <div class="video-wrapper group">
                     <video id="video1" playsinline loop preload="none">
                         <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/795184b0ad13dd537fd64eb6208a05774bb399d1/lv_0_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A2%D9%A0%D9%A1%D9%A0%D9%A1%D9%A3%D9%A2.mp4#t=0.1" type="video/mp4">
                     </video>
-                    <div class="play-overlay" onclick="toggleVideo('video1', this)">
-                        <div class="play-icon"><i class="fas fa-play pl-2"></i></div>
-                    </div>
+                    <div class="play-overlay" onclick="toggleVideo('video1', this)"><div class="play-icon"><i class="fas fa-play pl-2"></i></div></div>
                 </div>
                 <div class="video-wrapper group">
                     <video id="video2" playsinline loop preload="none">
                         <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A3_%D9%A2%D9%A1%D9%A0%D9%A9%D9%A1%D9%A3.mp4#t=0.1" type="video/mp4">
                     </video>
-                    <div class="play-overlay" onclick="toggleVideo('video2', this)">
-                        <div class="play-icon"><i class="fas fa-play pl-2"></i></div>
-                    </div>
+                    <div class="play-overlay" onclick="toggleVideo('video2', this)"><div class="play-icon"><i class="fas fa-play pl-2"></i></div></div>
                 </div>
             </section>
 
@@ -520,60 +346,88 @@
 
     <script>
         const START_DATE_STRING = "2025-11-23T03:20:00"; 
+        function adjustView() { setTimeout(() => { window.scrollTo(0, 100); }, 300); }
 
-        function adjustView() {
-            setTimeout(() => { window.scrollTo(0, 100); }, 300);
-        }
-
-        function checkPassword() {
+        // --- نظام التحميل الذكي ---
+        function startTruePreload() {
             const input = document.getElementById('pass-input').value;
-            if (input === "23112025") {
-                document.getElementById('pass-input').blur();
-                document.getElementById('login-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('loading-screen').classList.remove('hidden-content');
-                    initSiteContent();
-                }, 500);
+            if (input !== "23112025") {
+                document.getElementById('error-msg').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('pass-input').blur();
+            document.getElementById('login-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('loading-screen').classList.remove('hidden-content');
+            }, 500);
+
+            // تحميل الموارد الثقيلة في الخلفية
+            const assetsToLoad =[
+                { type: 'audio', id: 'bg-music' },
+                { type: 'video', id: 'video1' },
+                { type: 'video', id: 'video2' }
+            ];
+
+            let loadedAssets = 0;
+            const progressText = document.getElementById('loading-progress');
+            let isLoaded = false;
+
+            function updateProgress() {
+                loadedAssets++;
+                let percentage = Math.floor((loadedAssets / assetsToLoad.length) * 100);
+                progressText.innerText = `جاري تحميل الذكريات ${percentage}%`;
+                
+                if (loadedAssets >= assetsToLoad.length && !isLoaded) {
+                    finishLoadingProcess();
+                }
+            }
+
+            assetsToLoad.forEach(asset => {
+                const media = document.getElementById(asset.id);
+                media.preload = "auto";
+                media.load();
+                media.addEventListener('canplaythrough', updateProgress, {once: true});
+                media.addEventListener('error', updateProgress, {once: true}); // تجاوز الأخطاء
+            });
+
+            // مهلة زمنية إجبارية في حالة بطء الإنترنت حتى يفتح الموقع
+            setTimeout(() => {
+                if (!isLoaded) finishLoadingProcess();
+            }, 6000);
+
+            function finishLoadingProcess() {
+                isLoaded = true;
+                progressText.innerText = "اكتمل التحميل ✔️";
                 setTimeout(() => {
                     document.getElementById('loading-screen').style.opacity = '0';
                     setTimeout(() => {
                         document.getElementById('loading-screen').style.display = 'none';
                         document.getElementById('main-content').classList.remove('hidden-content');
-                        setupVideoObserver();
-                        
-                        window.scrollTo({ top: 0, behavior: 'instant' });
-
-                        const audio = document.getElementById('bg-music');
-                        audio.play().catch(e => console.log("Audio play failed:", e));
-                        document.getElementById('music-icon').className = 'fas fa-pause text-white';
+                        initSiteContent();
                     }, 500);
-                }, 3000); 
-            } else {
-                document.getElementById('error-msg').classList.remove('hidden');
+                }, 500);
             }
         }
 
         function initSiteContent() {
             startCounter();
             initSlider();
-            // تم زيادة الوقت بين ظهور القلوب لتخفيف اللاج
+            setupVideoObserver();
             setInterval(createHeart, 1200); 
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            
+            const audio = document.getElementById('bg-music');
+            audio.play().catch(e => console.log("Audio failed:", e));
+            document.getElementById('music-icon').className = 'fas fa-pause text-white';
         }
 
         function startCounter() {
             const startDate = new Date(START_DATE_STRING).getTime();
             setInterval(() => {
-                const now = new Date().getTime();
-                const diff = now - startDate;
-                if (diff < 0) {
-                    document.getElementById('future-msg').classList.remove('hidden');
-                    document.getElementById('past-msg').classList.add('hidden');
-                    document.getElementById("days").innerText = 0;
-                    document.getElementById("hours").innerText = 0;
-                    document.getElementById("minutes").innerText = 0;
-                    document.getElementById("seconds").innerText = 0;
-                } else {
+                const now = new Date().getTime(); const diff = now - startDate;
+                if (diff >= 0) {
                     document.getElementById('future-msg').classList.add('hidden');
                     document.getElementById('past-msg').classList.remove('hidden');
                     document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -586,37 +440,23 @@
 
         function stopAllMedia(exceptId = null) {
             const audio = document.getElementById('bg-music');
-            if (exceptId !== 'audio') {
-                audio.pause();
-                document.getElementById('music-icon').className = 'fas fa-music text-white';
-            }
+            if (exceptId !== 'audio') { audio.pause(); document.getElementById('music-icon').className = 'fas fa-music text-white'; }
             document.querySelectorAll('video').forEach(vid => {
-                if (vid.id !== exceptId) {
-                    vid.pause();
-                    showOverlay(vid);
-                    vid.removeAttribute("controls");
-                }
+                if (vid.id !== exceptId) { vid.pause(); showOverlay(vid); vid.removeAttribute("controls"); }
             });
         }
 
         function showOverlay(videoElement) {
             const overlay = videoElement.parentElement.querySelector('.play-overlay');
-            if (overlay) {
-                overlay.style.display = 'flex';
-                setTimeout(() => overlay.style.opacity = '1', 10);
-            }
+            if (overlay) { overlay.style.display = 'flex'; setTimeout(() => overlay.style.opacity = '1', 10); }
         }
 
         function toggleVideo(id, el) {
             stopAllMedia(id); 
             const vid = document.getElementById(id);
             if (vid.paused) {
-                vid.play();
-                el.style.opacity = '0';
-                setTimeout(() => {
-                    el.style.display = 'none';
-                    vid.setAttribute("controls", "controls");
-                }, 300);
+                vid.play(); el.style.opacity = '0';
+                setTimeout(() => { el.style.display = 'none'; vid.setAttribute("controls", "controls"); }, 300);
             }
         }
 
@@ -625,11 +465,7 @@
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) {
                         const video = entry.target;
-                        if (!video.paused) {
-                            video.pause();
-                            showOverlay(video);
-                            video.removeAttribute("controls");
-                        }
+                        if (!video.paused) { video.pause(); showOverlay(video); video.removeAttribute("controls"); }
                     }
                 });
             }, { threshold: 0.5 });
@@ -639,26 +475,15 @@
         function toggleMusic() {
             const audio = document.getElementById('bg-music');
             const icon = document.getElementById('music-icon');
-            if (audio.paused) {
-                stopAllMedia('audio'); 
-                audio.play();
-                icon.className = 'fas fa-pause text-white';
-            } else {
-                audio.pause();
-                icon.className = 'fas fa-music text-white';
-            }
+            if (audio.paused) { stopAllMedia('audio'); audio.play(); icon.className = 'fas fa-pause text-white'; } 
+            else { audio.pause(); icon.className = 'fas fa-music text-white'; }
         }
 
         function createHeart() {
-            // تقليل عدد القلوب المتواجدة معاً في نفس الوقت إلى 15 لمنع اللاج
             if(document.getElementsByClassName('heart').length > 15) return;
-            const h = document.createElement('div');
-            h.classList.add('heart');
-            h.innerHTML = '❤';
-            h.style.left = Math.random() * 95 + 'vw';
-            h.style.animationDuration = (Math.random() * 10 + 15) + 's';
-            h.style.fontSize = Math.random() * 15 + 10 + 'px';
-            document.getElementById('heart-bg').appendChild(h);
+            const h = document.createElement('div'); h.classList.add('heart'); h.innerHTML = '❤';
+            h.style.left = Math.random() * 95 + 'vw'; h.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            h.style.fontSize = Math.random() * 15 + 10 + 'px'; document.getElementById('heart-bg').appendChild(h);
             setTimeout(() => h.remove(), 25000);
         }
 
@@ -667,24 +492,12 @@
             t.innerHTML += t.innerHTML + t.innerHTML;
         }
 
-        function openModal() { 
-            document.getElementById('letterModal').style.display = 'flex'; 
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeModal() { 
-            document.getElementById('letterModal').style.display = 'none'; 
-            document.body.style.overflow = 'auto'; 
-        }
+        // إيقاف التمرير في الخلفية وقت فتح الرسالة عشان منع اللاج
+        function openModal() { document.getElementById('letterModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        function closeModal() { document.getElementById('letterModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
         
-        function openLightbox(src) {
-            const lb = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-            img.src = src;
-            lb.style.display = 'flex';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox').style.display = 'none';
-        }
+        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
     </script>
 </body>
 </html>
