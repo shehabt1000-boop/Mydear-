@@ -22,7 +22,7 @@
         #fixed-background {
             position: fixed; 
             top: -3vh; left: -3vw; /* مساحة أقل لمنع الزوم الزائد */
-            width: 106vw; height: 90vh; /* تقليل الزوم بشكل ملحوظ */
+            width: 106vw; height: 95vh; /* تقليل الزوم بشكل ملحوظ */
             background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=70');
             background-size: cover; background-position: center top; 
             z-index: -10; background-repeat: no-repeat; pointer-events: none;
@@ -34,7 +34,7 @@
 
         #fixed-background::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); 
+            background: rgba(0, 0, 0, 0.2); 
         }
 
         body {
@@ -56,10 +56,10 @@
         
         #login-screen::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.2.5); z-index: -1;
+            background: rgba(0, 0, 0, 0.2); z-index: -1;
         }
         
-        #loading-screen { background: rgba(0,0,0,0.4); }
+        #loading-screen { background: rgba(0,0,0,0.2); }
 
         .loader-container { position: relative; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; }
         .spinner-ring { position: absolute; width: 100%; height: 100%; border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #e11d48; border-radius: 50%; animation: spin 1s linear infinite; }
@@ -71,11 +71,11 @@
             background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.5);
             color: white; padding: 12px; border-radius: 50px; text-align: center; font-size: 1.2rem; 
             letter-spacing: 2px; width: 75%; max-width: 200px; outline: none; margin-bottom: 20px; transition: border-color 0.3s;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
         .input-glass:focus { border-color: #fb7185; background: rgba(255,255,255,0.3); }
         
-        h1, h2, h3, p, span, button { text-shadow: 0 2px 5px rgba(0,0,0,0.2.5); }
+        h1, h2, h3, p, span, button { text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         
         .hidden-content { display: none !important; }
 
