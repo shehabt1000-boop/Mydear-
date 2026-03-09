@@ -18,15 +18,14 @@
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* حل مشكلة اهتزاز الخلفية مع شريط المتصفح باستخدام تجاوز الأبعاد وتسريع المعالج الرسومي */
+        /* 1. الخلفية: تقليل الزوم مع منع الاهتزاز */
         #fixed-background {
             position: fixed; 
-            top: -10vh; left: -10vw; /* إخفاء الأطراف لعدم التأثر بتغير حجم الشاشة */
-            width: 120vw; height: 120vh; /* حجم أكبر من الشاشة لمنع الاهتزاز */
+            top: -3vh; left: -3vw; /* مساحة أقل لمنع الزوم الزائد */
+            width: 106vw; height: 106vh; /* تقليل الزوم بشكل ملحوظ */
             background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=70');
             background-size: cover; background-position: center top; 
             z-index: -10; background-repeat: no-repeat; pointer-events: none;
-            /* تسريع الهاردوير لمنع اللاج */
             transform: translate3d(0, 0, 0); 
             -webkit-transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
@@ -52,7 +51,7 @@
             z-index: 9999; display: flex; flex-direction: column; 
             align-items: center; justify-content: center; transition: opacity 0.5s ease-out;
             background: transparent;
-            transform: translateZ(0); /* تسريع */
+            transform: translateZ(0); 
         }
         
         #login-screen::before {
@@ -60,7 +59,6 @@
             background: rgba(0, 0, 0, 0.4); z-index: -1;
         }
         
-        /* تقليل الطبقة الداكنة لشاشة التحميل لتكون مثل شاشة الدخول */
         #loading-screen { background: rgba(0,0,0,0.4); }
 
         .loader-container { position: relative; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; }
@@ -77,7 +75,6 @@
         }
         .input-glass:focus { border-color: #fb7185; background: rgba(255,255,255,0.3); }
         
-        /* حل تقطيع اللاج: إزالة الظل من كل div وتخصيصه للنصوص فقط */
         h1, h2, h3, p, span, button { text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
         
         .hidden-content { display: none !important; }
@@ -87,15 +84,13 @@
         .heart { position: absolute; font-size: 1rem; color: rgba(229, 62, 62, 0.8); will-change: transform, opacity; animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; }
         @keyframes fall { 0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 1; } 100% { transform: translate3d(0, 110vh, 0) rotate(360deg); opacity: 0; } }
 
-        /* زجاج الحاوية: داكن ولكن شديد الشفافية لإظهار الخلفية بوضوح (بدون ضبابية مزعجة) */
+        /* 2. زجاج الحاوية: داكن وشفاف بدون أي ضبابية (Blur) بناء على طلبك */
         .glass-card { 
-            background: rgba(0, 0, 0, 0.25); /* شفاف جداً مع لون أسود خفيف */
-            backdrop-filter: blur(4px); /* ضبابية خفيفة جداً تظهر ما وراءها */
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.45); /* داكن يظهر الخلفية من ورائه */
             border: 1px solid rgba(225, 29, 72, 0.3); 
             border-radius: 15px; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
-            transform: translateZ(0); /* تسريع الأداء */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+            transform: translateZ(0); 
         }
 
         .year-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, 0.5); padding: 6px 16px; border-radius: 50px; margin-bottom: 30px; font-size: 0.85rem; border: 1px solid rgba(225, 29, 72, 0.5); max-width: 95%; }
@@ -121,40 +116,45 @@
         .flip-card-front { background: linear-gradient(45deg, #e11d48, #ff9a9e); color: white; font-weight: bold; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
         .flip-card-back { background: linear-gradient(to bottom, #9f1239, #500724); color: #ffe4e6; transform: rotateY(180deg); font-family: 'Marck Script', cursive; font-size: 1.2rem; border: 2px solid #fb7185; padding: 5px; }
 
-        /* نافذة الرسالة */
+        /* 3. نافذة الرسالة: حل اللاج بالانتقال السلس وعدم استخدام display: none */
         .modal { 
-            display: none; 
             position: fixed; 
-            z-index: 100; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100vh;
+            z-index: 99999; 
+            left: 0; top: 0; width: 100%; height: 100vh;
             background-color: rgba(0, 0, 0, 0.85); 
-            align-items: flex-start; 
-            justify-content: center;
-            padding-top: 5vh; 
-            overflow-y: auto; 
-            padding-bottom: 20px;
-            transform: translateZ(0); /* يمنع اللاج عند الفتح */
+            display: flex; /* موجودة دائماً ولكن مخفية بالشفافية لمنع إعادة الحسابات المعقدة */
+            align-items: flex-start; justify-content: center;
+            padding-top: 5vh; overflow-y: auto; padding-bottom: 20px;
+            
+            /* أداوت الإخفاء السلسة */
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+            will-change: opacity;
+            transform: translateZ(0); 
+        }
+        
+        .modal.show-modal {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .paper {
             background-image: url('https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=70');
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
             color: #ffe4e6;
-            width: 95%; 
-            max-width: 450px; 
+            width: 95%; max-width: 450px; 
             padding: 40px 25px 25px 25px; 
-            border-radius: 15px; 
-            border: 2px solid #fb7185;
+            border-radius: 15px; border: 2px solid #fb7185;
             box-shadow: 0 0 30px rgba(159, 18, 57, 0.4);
-            font-family: 'Marck Script', cursive; 
-            font-size: 1.25rem; 
-            line-height: 1.8; 
-            position: relative; 
-            margin: 0 auto; 
+            font-family: 'Marck Script', cursive; font-size: 1.25rem; line-height: 1.8; 
+            position: relative; margin: 0 auto; 
+            
+            /* تسريع رسومي لمنع اللاج في الخلفية الثقيلة */
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
         }
 
         .paper::before {
@@ -166,23 +166,12 @@
         .paper * { position: relative; z-index: 1; }
 
         .paper-close {
-            position: absolute; 
-            top: -12px;  
-            right: -10px; 
-            font-family: sans-serif; 
-            font-size: 20px; 
-            cursor: pointer; 
-            color: #fff;
-            background: #e11d48; 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%;
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            z-index: 10;
+            position: absolute; top: -12px; right: -10px; 
+            font-family: sans-serif; font-size: 20px; cursor: pointer; 
+            color: #fff; background: #e11d48; 
+            width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.5); z-index: 10;
         }
 
         /* الفيديو */
@@ -197,7 +186,7 @@
 </head>
 <body class="antialiased">
 
-    <!-- الخلفية المثبتة المعدلة لمنع الاهتزاز -->
+    <!-- الخلفية المثبتة المعدلة لمنع الاهتزاز + تصغير الزوم -->
     <div id="fixed-background"></div>
     
     <!-- عارض الصور -->
@@ -278,7 +267,7 @@
                 </div>
             </div>
 
-            <!-- قسم بداية حكايتنا (شفاف يظهر الخلفية) -->
+            <!-- قسم بداية حكايتنا (داكن فقط وبدون ضبابية) -->
             <section class="w-[95%] max-w-[350px] px-2 mb-10">
                 <div class="glass-card p-4 text-center">
                     <h3 class="text-xl font-bold text-rose-400 mb-2">بداية حكايتنا</h3>
@@ -286,7 +275,6 @@
                         في يوم <span class="text-white">23/11/2025</span> الساعة <span class="text-white">3:20</span>
                         <br>اللحظة اللي غيرت كل حاجة لما اعترفتي بحبك ليا.. ومن هنا بدأ العمر يحلو.
                     </p>
-                    <!-- استخدام bg-black/40 بدلاً من 70 لجعل العدادات شفافة قليلاً وتمرر الخلفية -->
                     <div class="grid grid-cols-4 gap-2 text-center" id="counter">
                         <div class="bg-black/40 py-2 px-1 rounded-lg border border-rose-500/40 shadow-inner">
                             <span class="block text-base font-bold text-white" id="days">0</span><span class="text-[10px] text-rose-300">يوم</span>
@@ -307,18 +295,18 @@
             </section>
 
             <section class="w-full max-w-4xl px-4 mb-12">
-                <h3 class="text-center text-xl font-bold text-rose-400 mb-4">ليه بحبك؟ <span class="text-xs text-gray-400 block mt-1">(الاجابة⬇️)</span></h3>
+                <h3 class="text-center text-xl font-bold text-rose-400 mb-4">بحبك ليه؟<span class="text-xs text-gray-400 block mt-1">(الاجابة⬇️)</span></h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-heart text-lg mb-1 block w-full"></i>السبب الأول</div><div class="flip-card-back">مقدرش اعيش من غيرك</div></div></div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-star text-lg mb-1 block w-full"></i>السبب التاني</div><div class="flip-card-back">عشان بتفهميني من عيني وبعشق عيونك</div></div></div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-smile text-lg mb-1 block w-full"></i>السبب التالت</div><div class="flip-card-back">ضحكتك اللي بتنور يومي وبتنسيني همومي</div></div></div>
-                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-infinity text-lg mb-1 block w-full"></i>السبب الرابع</div><div class="flip-card-back">عشان إنتي Aya</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-heart text-lg mb-1 block w-full"></i>السبب الأول</div><div class="flip-card-back"> مقدرش اعيش من غيرك يامامت اية❤</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-star text-lg mb-1 block w-full"></i>السبب التاني</div><div class="flip-card-back">عشان بتفهميني من عيني وبعشق عيونك الحلوين الي بشوف نفسي فيهم❤</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-smile text-lg mb-1 block w-full"></i>السبب التالت</div><div class="flip-card-back">ضحكتك اللي بتنور يومي وبتنسيني الهم ياروحي❤</div></div></div>
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-card-front"><i class="fas fa-infinity text-lg mb-1 block w-full"></i>السبب الرابع</div><div class="flip-card-back">  البنوتة الي بحبها ولقيت راحتي وساعدتي معاها❤ عشان إنتي Aya</div></div></div>
                 </div>
             </section>
 
             <!-- السلايدر الأصلي -->
             <section class="w-full mb-12 overflow-hidden">
-                <h3 class="text-center text-xl font-bold text-rose-400 mb-4">شوفتي القمر</h3>
+                <h3 class="text-center text-xl font-bold text-rose-400 mb-4"> شوفتي القمر ميتقارنش بجمالك </h3>
                 <div class="slider-container">
                     <div class="slider-track" id="slider-track">
                         <div class="slider-item" onclick="openLightbox('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A1_%D9%A1%D9%A6%D9%A4%D9%A3%D9%A4%D9%A0(1).jpg&w=800&output=webp')">
@@ -339,7 +327,7 @@
 
             <!-- الفيديوهات الأصلية -->
             <section class="w-full max-w-4xl px-4">
-                <h3 class="text-center text-xl font-bold text-rose-400 mb-4"> موزتي جميلة ومميزة</h3>
+                <h3 class="text-center text-xl font-bold text-rose-400 mb-4">  بنوتي وموزتي جميلة ومميزة</h3>
                 <div class="video-wrapper group">
                     <video id="video1" playsinline loop preload="none">
                         <source src="https://raw.githubusercontent.com/shehabt1000-boop/Moussa/795184b0ad13dd537fd64eb6208a05774bb399d1/lv_0_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A2%D9%A0%D9%A2%D9%A0%D9%A1%D9%A0%D9%A1%D9%A3%D9%A2.mp4#t=0.1" type="video/mp4">
@@ -380,7 +368,6 @@
             setTimeout(() => {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('loading-screen').classList.remove('hidden-content');
-                // طلب رسم الواجهة لتجنب اللاج
                 requestAnimationFrame(() => {
                     document.getElementById('loading-screen').style.opacity = '1';
                 });
@@ -513,8 +500,15 @@
             t.innerHTML += t.innerHTML + t.innerHTML;
         }
 
-        function openModal() { document.getElementById('letterModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function closeModal() { document.getElementById('letterModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        // تم تعديل دوال الفتح والإغلاق لاستخدام كلاس (show-modal) لضمان نعومة وسلاسة الحركة
+        function openModal() { 
+            document.getElementById('letterModal').classList.add('show-modal');
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeModal() { 
+            document.getElementById('letterModal').classList.remove('show-modal');
+            document.body.style.overflow = 'auto'; 
+        }
         
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
