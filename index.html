@@ -18,13 +18,19 @@
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* الخلفية الأصلية للموقع */
+        /* حل مشكلة اهتزاز الخلفية مع شريط المتصفح باستخدام تجاوز الأبعاد وتسريع المعالج الرسومي */
         #fixed-background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; 
+            position: fixed; 
+            top: -10vh; left: -10vw; /* إخفاء الأطراف لعدم التأثر بتغير حجم الشاشة */
+            width: 120vw; height: 120vh; /* حجم أكبر من الشاشة لمنع الاهتزاز */
             background-image: url('https://wsrv.nl/?url=raw.githubusercontent.com/shehabt1000-boop/Moussa/3c5822b0deb99157562300b4aefb8ce499b83603/IMG-20251124-WA0051.jpg&w=600&output=webp&q=70');
             background-size: cover; background-position: center top; 
             z-index: -10; background-repeat: no-repeat; pointer-events: none;
-            transform: translateZ(0); will-change: transform;
+            /* تسريع الهاردوير لمنع اللاج */
+            transform: translate3d(0, 0, 0); 
+            -webkit-transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            will-change: transform;
         }
 
         #fixed-background::after {
@@ -46,6 +52,7 @@
             z-index: 9999; display: flex; flex-direction: column; 
             align-items: center; justify-content: center; transition: opacity 0.5s ease-out;
             background: transparent;
+            transform: translateZ(0); /* تسريع */
         }
         
         #login-screen::before {
@@ -53,11 +60,12 @@
             background: rgba(0, 0, 0, 0.4); z-index: -1;
         }
         
-        #loading-screen { background: rgba(0,0,0,0.8); }
+        /* تقليل الطبقة الداكنة لشاشة التحميل لتكون مثل شاشة الدخول */
+        #loading-screen { background: rgba(0,0,0,0.4); }
 
         .loader-container { position: relative; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; }
         .spinner-ring { position: absolute; width: 100%; height: 100%; border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #e11d48; border-radius: 50%; animation: spin 1s linear infinite; }
-        .loader-heart { font-size: 2rem; color: #e11d48; animation: pulse-heart 1s infinite alternate; }
+        .loader-heart { font-size: 2rem; color: #e11d48; animation: pulse-heart 1s infinite alternate; will-change: transform; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse-heart { from { transform: scale(0.8); opacity: 0.8; } to { transform: scale(1.1); opacity: 1; } }
 
@@ -69,40 +77,51 @@
         }
         .input-glass:focus { border-color: #fb7185; background: rgba(255,255,255,0.3); }
         
-        h1, h2, p, span, button, div { text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
+        /* حل تقطيع اللاج: إزالة الظل من كل div وتخصيصه للنصوص فقط */
+        h1, h2, h3, p, span, button { text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
         
         .hidden-content { display: none !important; }
 
         /* القلوب */
-        .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+        .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; transform: translateZ(0); }
         .heart { position: absolute; font-size: 1rem; color: rgba(229, 62, 62, 0.8); will-change: transform, opacity; animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; }
-        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+        @keyframes fall { 0% { transform: translate3d(0, -10vh, 0) rotate(0deg); opacity: 1; } 100% { transform: translate3d(0, 110vh, 0) rotate(360deg); opacity: 0; } }
 
-        .glass-card { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+        /* زجاج الحاوية: داكن ولكن شديد الشفافية لإظهار الخلفية بوضوح (بدون ضبابية مزعجة) */
+        .glass-card { 
+            background: rgba(0, 0, 0, 0.25); /* شفاف جداً مع لون أسود خفيف */
+            backdrop-filter: blur(4px); /* ضبابية خفيفة جداً تظهر ما وراءها */
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(225, 29, 72, 0.3); 
+            border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+            transform: translateZ(0); /* تسريع الأداء */
+        }
+
         .year-badge { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: rgba(0, 0, 0, 0.5); padding: 6px 16px; border-radius: 50px; margin-bottom: 30px; font-size: 0.85rem; border: 1px solid rgba(225, 29, 72, 0.5); max-width: 95%; }
 
         /* السلايدر */
-        .slider-container { overflow: hidden; white-space: nowrap; position: relative; padding: 10px 0; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .slider-container { overflow: hidden; white-space: nowrap; position: relative; padding: 10px 0; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); transform: translateZ(0); }
         .slider-track { display: inline-block; animation: scroll 60s linear infinite; will-change: transform; }
         .slider-item { display: inline-block; width: 180px; height: 250px; margin: 0 6px; border-radius: 10px; overflow: hidden; border: 2px solid #e11d48; transition: transform 0.3s; position: relative; cursor: pointer; background: #111; }
         .slider-item img { width: 100%; height: 100%; object-fit: cover; }
         html[dir="rtl"] .slider-track { animation: scrollRTL 60s linear infinite; }
-        @keyframes scrollRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+        @keyframes scrollRTL { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(50%,0,0); } }
 
         /* عارض الصور */
-        #lightbox { position: fixed; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; }
+        #lightbox { position: fixed; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; transform: translateZ(0); }
         #lightbox img { max-width: 95%; max-height: 80vh; object-fit: contain; border-radius: 10px; border: 2px solid #e11d48; }
         #lightbox-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer; background: rgba(225, 29, 72, 0.8); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
         /* كروت الحب */
         .flip-card { background-color: transparent; width: 100%; height: 110px; perspective: 1000px; cursor: pointer; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; will-change: transform; }
         .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
         .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 5px; }
         .flip-card-front { background: linear-gradient(45deg, #e11d48, #ff9a9e); color: white; font-weight: bold; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
         .flip-card-back { background: linear-gradient(to bottom, #9f1239, #500724); color: #ffe4e6; transform: rotateY(180deg); font-family: 'Marck Script', cursive; font-size: 1.2rem; border: 2px solid #fb7185; padding: 5px; }
 
-        /* نافذة الرسالة (تم رفعها لأعلى الشاشة وتصليح الزر والميلان) */
+        /* نافذة الرسالة */
         .modal { 
             display: none; 
             position: fixed; 
@@ -111,48 +130,45 @@
             top: 0; 
             width: 100%; 
             height: 100vh;
-            height: 100lvh;
-            background-color: rgba(0, 0, 0, 0.85); /* خلفية داكنة خفيفة تمنع اللاج */
-            align-items: flex-start; /* رفع الرسالة لأعلى الشاشة */
+            background-color: rgba(0, 0, 0, 0.85); 
+            align-items: flex-start; 
             justify-content: center;
-            padding-top: 5vh; /* مسافة بسيطة من السقف */
-            overflow-y: auto; /* للسماح بالتمرير إذا كانت الشاشة صغيرة */
+            padding-top: 5vh; 
+            overflow-y: auto; 
             padding-bottom: 20px;
+            transform: translateZ(0); /* يمنع اللاج عند الفتح */
         }
 
         .paper {
-            /* خلفية الرسالة الأصلية مصغرة للسرعة */
             background-image: url('https://wsrv.nl/?url=images.pexels.com/photos/1028729/pexels-photo-1028729.jpeg&w=400&output=webp&q=70');
             background-size: cover;
             background-position: center;
             color: #ffe4e6;
-            width: 90%; 
-            max-width: 380px;
-            padding: 35px 20px 20px 20px;
+            width: 95%; 
+            max-width: 450px; 
+            padding: 40px 25px 25px 25px; 
             border-radius: 15px; 
             border: 2px solid #fb7185;
             box-shadow: 0 0 30px rgba(159, 18, 57, 0.4);
             font-family: 'Marck Script', cursive; 
-            font-size: 1rem; 
-            line-height: 1.6;
+            font-size: 1.25rem; 
+            line-height: 1.8; 
             position: relative; 
-            margin: 0 auto; /* توسيط أفقي */
-            transform: none; /* إزالة الميلان (كانت مايلة بالسالب) */
+            margin: 0 auto; 
         }
 
         .paper::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* تغميق خفيف لتحسين قراءة النص */
+            background: rgba(0, 0, 0, 0.65); 
             z-index: 0; border-radius: 13px;
         }
 
         .paper * { position: relative; z-index: 1; }
 
-        /* زر الإغلاق لازق في الرسالة من فوق */
         .paper-close {
             position: absolute; 
-            top: -12px;  /* الزر طالع برا الرسالة حتة صغيرة من فوق */
-            right: -10px; /* وطالع برا حتة صغيرة من اليمين */
+            top: -12px;  
+            right: -10px; 
             font-family: sans-serif; 
             font-size: 20px; 
             cursor: pointer; 
@@ -170,7 +186,7 @@
         }
 
         /* الفيديو */
-        .video-wrapper { position: relative; width: 100%; max-width: 600px; height: 65vh; margin: 0 auto 1.5rem auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(225, 29, 72, 0.3); border: 1px solid #e11d48; background-color: #000; }
+        .video-wrapper { position: relative; width: 100%; max-width: 600px; height: 65vh; margin: 0 auto 1.5rem auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(225, 29, 72, 0.3); border: 1px solid #e11d48; background-color: #000; transform: translateZ(0); }
         .video-wrapper video { width: 100%; height: 100%; object-fit: cover; display: block; }
         .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center; cursor: pointer; transition: opacity 0.3s; z-index: 2; }
         .play-icon { font-size: 2.5rem; color: #fff; background: rgba(225, 29, 72, 0.8); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px #e11d48; }
@@ -181,7 +197,7 @@
 </head>
 <body class="antialiased">
 
-    <!-- الخلفية المثبتة -->
+    <!-- الخلفية المثبتة المعدلة لمنع الاهتزاز -->
     <div id="fixed-background"></div>
     
     <!-- عارض الصور -->
@@ -246,7 +262,7 @@
                 </button>
             </section>
 
-            <!-- نافذة الرسالة (النص الأصلي بالكامل وزر الإغلاق متصل بها) -->
+            <!-- نافذة الرسالة -->
             <div id="letterModal" class="modal">
                 <div class="paper">
                     <div class="paper-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
@@ -262,29 +278,31 @@
                 </div>
             </div>
 
-            <section class="w-[90%] max-w-[300px] px-2 mb-10">
-                <div class="glass-card p-2 text-center">
+            <!-- قسم بداية حكايتنا (شفاف يظهر الخلفية) -->
+            <section class="w-[95%] max-w-[350px] px-2 mb-10">
+                <div class="glass-card p-4 text-center">
                     <h3 class="text-xl font-bold text-rose-400 mb-2">بداية حكايتنا</h3>
-                    <p class="text-sm text-gray-300 mb-3 leading-relaxed">
-                        في يوم <span class="font-bold text-white">23/11/2025</span> الساعة <span class="font-bold text-white">3:20</span>
+                    <p class="text-sm text-gray-200 mb-4 leading-relaxed font-bold">
+                        في يوم <span class="text-white">23/11/2025</span> الساعة <span class="text-white">3:20</span>
                         <br>اللحظة اللي غيرت كل حاجة لما اعترفتي بحبك ليا.. ومن هنا بدأ العمر يحلو.
                     </p>
-                    <div class="grid grid-cols-4 gap-1 text-center" id="counter">
-                        <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="days">0</span><span class="text-[9px] text-rose-300">يوم</span>
+                    <!-- استخدام bg-black/40 بدلاً من 70 لجعل العدادات شفافة قليلاً وتمرر الخلفية -->
+                    <div class="grid grid-cols-4 gap-2 text-center" id="counter">
+                        <div class="bg-black/40 py-2 px-1 rounded-lg border border-rose-500/40 shadow-inner">
+                            <span class="block text-base font-bold text-white" id="days">0</span><span class="text-[10px] text-rose-300">يوم</span>
                         </div>
-                        <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="hours">0</span><span class="text-[9px] text-rose-300">ساعة</span>
+                        <div class="bg-black/40 py-2 px-1 rounded-lg border border-rose-500/40 shadow-inner">
+                            <span class="block text-base font-bold text-white" id="hours">0</span><span class="text-[10px] text-rose-300">ساعة</span>
                         </div>
-                        <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="minutes">0</span><span class="text-[9px] text-rose-300">دقيقة</span>
+                        <div class="bg-black/40 py-2 px-1 rounded-lg border border-rose-500/40 shadow-inner">
+                            <span class="block text-base font-bold text-white" id="minutes">0</span><span class="text-[10px] text-rose-300">دقيقة</span>
                         </div>
-                        <div class="bg-black/40 py-1.5 px-0.5 rounded border border-rose-500/30">
-                            <span class="block text-sm font-bold text-white" id="seconds">0</span><span class="text-[9px] text-rose-300">ثانية</span>
+                        <div class="bg-black/40 py-2 px-1 rounded-lg border border-rose-500/40 shadow-inner">
+                            <span class="block text-base font-bold text-white" id="seconds">0</span><span class="text-[10px] text-rose-300">ثانية</span>
                         </div>
                     </div>
-                    <p id="future-msg" class="mt-2 text-[10px] text-yellow-400 hidden">لسه التاريخ مجاش.. بنجهز للبداية 😉</p>
-                    <p id="past-msg" class="mt-2 text-[10px] text-gray-400 hidden">بنحب بعض بقالنا...</p>
+                    <p id="future-msg" class="mt-3 text-xs text-yellow-400 hidden font-bold">لسه التاريخ مجاش.. بنجهز للبداية 😉</p>
+                    <p id="past-msg" class="mt-3 text-xs text-gray-300 hidden font-bold">بنحب بعض بقالنا...</p>
                 </div>
             </section>
 
@@ -298,7 +316,7 @@
                 </div>
             </section>
 
-            <!-- السلايدر الأصلي (الصور مصغرة أثناء التحميل، وتفتح بجودة 800) -->
+            <!-- السلايدر الأصلي -->
             <section class="w-full mb-12 overflow-hidden">
                 <h3 class="text-center text-xl font-bold text-rose-400 mb-4">شوفتي القمر</h3>
                 <div class="slider-container">
@@ -358,12 +376,16 @@
 
             document.getElementById('pass-input').blur();
             document.getElementById('login-screen').style.opacity = '0';
+            
             setTimeout(() => {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('loading-screen').classList.remove('hidden-content');
+                // طلب رسم الواجهة لتجنب اللاج
+                requestAnimationFrame(() => {
+                    document.getElementById('loading-screen').style.opacity = '1';
+                });
             }, 500);
 
-            // تحميل الموارد الثقيلة في الخلفية
             const assetsToLoad =[
                 { type: 'audio', id: 'bg-music' },
                 { type: 'video', id: 'video1' },
@@ -389,10 +411,9 @@
                 media.preload = "auto";
                 media.load();
                 media.addEventListener('canplaythrough', updateProgress, {once: true});
-                media.addEventListener('error', updateProgress, {once: true}); // تجاوز الأخطاء
+                media.addEventListener('error', updateProgress, {once: true}); 
             });
 
-            // مهلة زمنية إجبارية في حالة بطء الإنترنت حتى يفتح الموقع
             setTimeout(() => {
                 if (!isLoaded) finishLoadingProcess();
             }, 6000);
@@ -492,7 +513,6 @@
             t.innerHTML += t.innerHTML + t.innerHTML;
         }
 
-        // إيقاف التمرير في الخلفية وقت فتح الرسالة عشان منع اللاج
         function openModal() { document.getElementById('letterModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
         function closeModal() { document.getElementById('letterModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
         
